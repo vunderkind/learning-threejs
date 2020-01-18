@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+    <script src="./three.js-master/examples/js/loaders/GLTFLoader.js"></script>
+
+
+    <script>
+        //1. Creating scene
+        var scene = new THREE.Scene();
+
+
+        //2. Create Perspective camera (which takes four variables namely: field of view (FOV), aspect ratio, near and fair planes)
+        var camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth/window.innerHeight,
+            10,
+            1000
+        )
+        camera.position.set(-10,10,300); //zooms in and out. the smaller, the closer
+
+        //3. Set up your render (could be a WebGL render, a CSS2D render, or an SVG renderer). WebGL is the most advanced.
+        var renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setClearColor('#242424'); //background color of renderer
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        //4. Append the renderer to the window DOM element
+        document.body.appendChild(renderer.domElement);
+
+        //On the display, now what you see is a black screen. It isn't responsive, but takes the shape of the viewport at the time of refreshing. Let's fix that: 
+
+        window.addEventListener('resize', ()=>{
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //Also, adjust the aspect ratio with the resize
+            camera.aspect = window.innerWidth/window.innerHeight;
+            camera.updateProjectionMatrix(); //dunno what this means!
+        })
+
+        // 5. Notice the blackness? Remove it by doing this:
+
+        
+        //and now we have the scene and the camera rendered!
+
+        //Note: when working with a 3d element, there are two things to consider: the physical shape/form, and the material. A glass cup (physical shape) has a glossy material for example. You define these two things in three JS. I'm not going to do that here (or I did, before, but deleted it after I'd taken the lesson). Instead I'll go to SketchFab to import a GLTF object
+        
+
+        //Let there be light!
+        var light = new THREE.AmbientLight(0xFFFEE0, 3, 100);
+        light.position.set(10,0,25);
+        scene.add(light);
+
+        
+
+        var spotlight = new THREE.PointLight( 0xFFFEE0, 100, 60 );
+        spotlight.position.set( 5, 50, 2 );
+        scene.add( spotlight );
+
+        var loader = new THREE.GLTFLoader();
+
+        //Add/import object
+
+        const mainOBJ = './object/scene.gltf';
+
+
+        loader.load( mainOBJ, function ( gltf ) {
+            scene.add( gltf.scene );
+            car = gltf.scene.children[0];
+            animate();
+
+        });
+
+        //Animate the object 
+        function animate(){
+            requestAnimationFrame(animate);
+            car.rotation.z+=0.015;
+            // car.scale.z+=0.1;
+            // car.rotation.y+=0.01;
+        }
+
+        var render = function() {
+            requestAnimationFrame(render);
+            renderer.render(scene, camera); 
+
+        }
+        
+        render();
+        //render scene (should be usually at the bottom of everything)
+
+
+    </script>
+</body>
+</html>

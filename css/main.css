@@ -1,0 +1,13 @@
+body {
+    margin: o;
+    height: 100vh;
+}
+
+canvas {
+    display: block;
+}
+
+.ride {
+    color: white;
+    font-size: 80px;
+}
