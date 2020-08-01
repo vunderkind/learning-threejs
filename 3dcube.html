@@ -12,23 +12,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
     <script src="./three.js-master/examples/js/loaders/GLTFLoader.js"></script>
     <canvas id="canvas"></canvas>
+</body>
 
     <script>
-        let canvas = document.querySelector('#canvas');
 
         //render the canvas
-        const render = new THREE.WebGLRenderer({canvas});
+        function main(){
+        let canvas = document.querySelector('#canvas');
+        const renderer = new THREE.WebGLRenderer({canvas});
         
         // Set up scene and camera
-        const scene = new THREE.Scene();
         const fov = 75;
         const aspect = 2;
-        const near = 1;
+        const near = 0.1;
         const far = 5;
         const camera = new THREE.PerspectiveCamera(fov,aspect,near,far);
-        camera.position.x = 3;
+        camera.position.z = 2;
+
+        const scene = new THREE.Scene();
         
+        //let's create a Mesh. But first, geometry and material
+        const geometry = new THREE.BoxGeometry(1,1,1);
+        const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
+        const cube = new THREE.Mesh(geometry,material);
+        scene.add(cube);
         
+        renderer.render(scene,camera);
+        }
+        main();
+
         </script>
-</body>
 </html>
