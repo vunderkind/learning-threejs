@@ -35,9 +35,31 @@
         const geometry = new THREE.BoxGeometry(1,1,1);
         const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
         const cube = new THREE.Mesh(geometry,material);
+
+        const phong = new THREE.MeshPhongMaterial({color: 0xfafafa});
+        const secondCube = new THREE.Mesh(geometry,phong);
+        secondCube.position.x = 2
+
+        const light = new THREE.DirectionalLight(0xffe96b, 1)
+        light.position.x = -1;
+        light.position.y = 2;
+        light.position.z = 4;
+        scene.add(light);
         scene.add(cube);
+        scene.add(secondCube);
+
+        function renderIt(time){
+            time *= 0.001
+            cube.rotation.x =time
+            cube.rotation.y =time
+            secondCube.rotation.x =time
+            secondCube.rotation.y =time
+            renderer.render(scene,camera);
+            requestAnimationFrame(renderIt)
+
+        }
+        requestAnimationFrame(renderIt)
         
-        renderer.render(scene,camera);
         }
         main();
 
