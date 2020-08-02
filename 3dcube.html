@@ -7,6 +7,17 @@
     <title>Document</title>
     <link rel="stylesheet" href="./css/main.css">
 </head>
+<style>
+    html, body {
+   margin: 0;
+   height: 100%;
+}
+#canvas {
+   width: 100%;
+   height: 100%;
+   display: block;
+}
+</style>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
@@ -33,27 +44,50 @@
         
         //let's create a Mesh. But first, geometry and material
         const geometry = new THREE.BoxGeometry(1,1,1);
-        const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
+        const texture = new THREE.TextureLoader()
+        const first_texture = texture.load('./griddy.png')
+        const second_texture = texture.load('./badman.png')
+        const material = new THREE.MeshPhongMaterial({map: first_texture});
         const cube = new THREE.Mesh(geometry,material);
+        cube.position.x = -1;
 
-        const phong = new THREE.MeshPhongMaterial({color: 0xfafafa});
+        const phong = new THREE.MeshPhongMaterial({map: second_texture});
         const secondCube = new THREE.Mesh(geometry,phong);
-        secondCube.position.x = 2
+        secondCube.position.x = 1;
 
-        const light = new THREE.DirectionalLight(0xffe96b, 1)
+        const newgeometry = new THREE.SphereGeometry( 5, 32, 32 );
+        const sphere = new THREE.Mesh( newgeometry, phong );
+        sphere.position.x = -2;
+        console.log(sphere)
+
+        const light = new THREE.DirectionalLight(0xffffff, 1)
         light.position.x = -1;
-        light.position.y = 2;
+        light.position.y = 0;
         light.position.z = 4;
         scene.add(light);
         scene.add(cube);
         scene.add(secondCube);
+        scene.add( sphere );
 
         function renderIt(time){
             time *= 0.001
+            const pixelRatio = window.devicePixelRatio;
+            const width = canvas.clientWidth * pixelRatio | 0;
+            const height = canvas.clientHeight * pixelRatio | 0;
+
+            if(canvas.width != width || canvas.height!=height){
+                renderer.setSize(width, height, false)
+            }
+            camera.aspect = width/height;
+            
+            camera.updateProjectionMatrix();
+
             cube.rotation.x =time
             cube.rotation.y =time
             secondCube.rotation.x =time
             secondCube.rotation.y =time
+            sphere.rotation.x =time
+            sphere.rotation.y =time
             renderer.render(scene,camera);
             requestAnimationFrame(renderIt)
 
