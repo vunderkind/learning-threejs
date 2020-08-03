@@ -55,10 +55,10 @@
         const secondCube = new THREE.Mesh(geometry,phong);
         secondCube.position.x = 1;
 
-        const newgeometry = new THREE.SphereGeometry( 5, 32, 32 );
-        const sphere = new THREE.Mesh( newgeometry, phong );
-        sphere.position.x = -2;
-        console.log(sphere)
+        const ageometry = new THREE.SphereGeometry( 5, 32, 32 );
+        const amaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+        const sphere = new THREE.Mesh( ageometry, amaterial );
+        scene.add( sphere );
 
         const light = new THREE.DirectionalLight(0xffffff, 1)
         light.position.x = -1;
